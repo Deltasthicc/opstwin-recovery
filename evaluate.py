@@ -19,6 +19,7 @@ Outputs:
 """
 import argparse
 import json
+import re
 import random
 import statistics
 import sys
@@ -130,11 +131,21 @@ class ModelPolicy:
                 do_sample=True,
                 pad_token_id=self.tokenizer.eos_token_id,
             )
-        response = self.tokenizer.decode(
+        raw = self.tokenizer.decode(
             out[0][inputs["input_ids"].shape[1]:],
             skip_special_tokens=True,
-        ).strip().split("\n")[0].strip().strip('"').strip("'")
-        cmd = response or "REQUEST_INFO summary"
+        )
+        # Strip <think>...</think> blocks (Qwen3), code fences, quotes,
+        # training-history prefix leaks (S5: ...), trailing reward arrows.
+        cleaned = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
+        cleaned = re.sub(r"^```[a-zA-Z]*\n?", "", cleaned)
+        cleaned = re.sub(r"\n?```$", "", cleaned).strip()
+        cleaned = cleaned.strip('`"\'')
+        cleaned = re.sub(r"^S\d+:\s*", "", cleaned)
+        cleaned = re.sub(r"\s*->\s*[+-]?\d*\.?\d+\s*$", "", cleaned)
+        cleaned = cleaned.split(" -> ")[0]
+        cleaned = cleaned.split("\n")[0].strip()
+        cmd = cleaned or "REQUEST_INFO summary"
         self._history.append(f"S{self._step}: {cmd}")
         return cmd
 
