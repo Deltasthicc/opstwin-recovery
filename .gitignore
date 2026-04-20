@@ -1,0 +1,173 @@
+# --------------------------------------------------------------------------
+# OpsTwin Recovery Arena -- .gitignore
+# --------------------------------------------------------------------------
+# What stays OUT of the repo. Committing any of these is either a security
+# risk, a size problem, or repository noise.
+# --------------------------------------------------------------------------
+
+# ==========================================================================
+# Python
+# ==========================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+
+# PEP 582
+__pypackages__/
+
+# Unit test / coverage
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+htmlcov/
+
+# mypy / pyre / pytype
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# Jupyter / IPython
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+*.ipynb
+
+# ==========================================================================
+# Virtual environments
+# ==========================================================================
+.env.local
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ==========================================================================
+# Secrets (CRITICAL -- never commit these)
+# ==========================================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*secret*.json
+*credentials*.json
+*.cert
+.hf_token
+
+# ==========================================================================
+# OpsTwin runtime outputs
+# ==========================================================================
+
+# Training checkpoints: too large and too transient for git
+checkpoints/
+checkpoints-*/
+runs/
+
+# Postmortem store grows unbounded during runs; not source
+baselines/trajectories/postmortems.jsonl
+baselines/trajectories/postmortems-*.jsonl
+
+# Evaluation outputs regenerated on every run. Commit the ones used for the
+# demo as a separate one-off (e.g. results/demo_eval_curve.png) if needed.
+results/*.png
+results/*.json
+results/inference_logs/
+!results/.gitkeep
+
+# We DO commit expert trajectories as evidence artifacts
+!baselines/trajectories/bad_release.jsonl
+!baselines/trajectories/security_cve.jsonl
+!baselines/trajectories/data_pipeline_regression.jsonl
+!baselines/trajectories/false_positive.jsonl
+!baselines/trajectories/summary.json
+
+# ==========================================================================
+# IDE / editor
+# ==========================================================================
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# ==========================================================================
+# OS cruft
+# ==========================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# ==========================================================================
+# Miscellaneous
+# ==========================================================================
+*.log
+*.tmp
+*.bak
+*.orig
+.backup/
+
+# Notebooks we use for scratch analysis -- keep the folder but not contents
+notebooks/*.ipynb
+!notebooks/.gitkeep

@@ -1,0 +1,26 @@
+name: opstwin-recovery
+version: 1.0.0
+description: >
+  Enterprise incident response arena. Agent coordinates five operational
+  desks (SRE, Security, Support, Release, Incident Command) to recover
+  service, resolve tickets, and satisfy policy constraints within a step
+  budget. Features hidden state revealed by inspection, cascade-risk
+  service dependency graph, and six-dimensional multi-objective scoring.
+
+author: Shashwat Rajan, Tanish Shitanshu
+tags:
+  - multi-agent
+  - long-horizon
+  - enterprise
+  - incident-response
+  - world-model
+
+entrypoint: server.app:app
+container:
+  dockerfile: Dockerfile
+  port: 8000
+
+action_class: models.OpsAction
+observation_class: models.OpsObservation
+state_class: models.OpsState
+client_class: client.OpsTwinRecoveryEnv
