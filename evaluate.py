@@ -127,8 +127,8 @@ class ModelPolicy:
             out = self.model.generate(
                 **inputs,
                 max_new_tokens=self.max_new_tokens,
-                temperature=0.3,
-                do_sample=True,
+                temperature=0.0,
+                do_sample=False,
                 pad_token_id=self.tokenizer.eos_token_id,
             )
         raw = self.tokenizer.decode(
