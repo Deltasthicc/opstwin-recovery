@@ -1,0 +1,63 @@
+[START] task=bad_release env=opstwin_recovery model=Qwen/Qwen3-8B
+[DEBUG] Provider does not accept chat_template_kwargs; disabling and retrying this turn.
+[STEP] step=1 action=ASSESS_BLAST_RADIUS reward=0.02 done=false error=null
+[STEP] step=2 action=SWITCH_DESK SRE reward=0.01 done=false error=null
+[STEP] step=3 action=ASSESS_BLAST_RADIUS reward=-0.02 done=false error=null
+[STEP] step=4 action=SWITCH_DESK INCIDENT_COMMAND reward=0.01 done=false error=null
+[STEP] step=5 action=SWITCH_DESK SRE reward=0.00 done=false error=null
+[STEP] step=6 action=ROLLBACK_DEPLOYMENT deploy-checkout-v2.3.1 reward=0.00 done=false error=null
+[STEP] step=7 action=SWITCH_DESK SUPPORT reward=0.01 done=false error=null
+[STEP] step=8 action=PRIORITIZE_VIP T-003 reward=0.20 done=false error=null
+[STEP] step=9 action=PRIORITIZE_VIP T-001 reward=-0.02 done=false error=null
+[STEP] step=10 action=PRIORITIZE_VIP T-002 reward=-0.02 done=false error=null
+[STEP] step=11 action=PRIORITIZE_VIP T-002 reward=-0.02 done=false error=null
+[STEP] step=12 action=PRIORITIZE_VIP T-002 reward=-0.02 done=false error=null
+[STEP] step=13 action=PRIORITIZE_VIP T-002 reward=-0.02 done=false error=null
+[STEP] step=14 action=PRIORITIZE_VIP T-001 reward=-0.02 done=true error=null
+[END] success=false steps=14 score=0.35 rewards=0.02,0.01,-0.02,0.01,0.00,0.00,0.01,0.20,-0.02,-0.02,-0.02,-0.02,-0.02,-0.02
+[START] task=security_cve env=opstwin_recovery model=Qwen/Qwen3-8B
+[STEP] step=1 action=ASSESS_BLAST_RADIUS reward=0.02 done=false error=null
+[STEP] step=2 action=SWITCH_DESK SRE reward=0.01 done=false error=null
+[STEP] step=3 action=INSPECT_RUNBOOK auth-svc reward=0.02 done=false error=null
+[STEP] step=4 action=BLOCK_ROLLOUT deploy-auth-patch-1.8.2 reward=-0.02 done=false error=null
+[STEP] step=5 action=BLOCK_ROLLOUT deploy-auth-patch-1.8.2 reward=-0.02 done=false error=null
+[STEP] step=6 action=APPROVE_EXCEPTION deploy-auth-patch-1.8.2 reward=-0.02 done=false error=null
+[STEP] step=7 action=SWITCH_DESK SECURITY reward=0.01 done=false error=null
+[STEP] step=8 action=APPROVE_EXCEPTION deploy-auth-patch-1.8.2 reward=0.15 done=false error=null
+[STEP] step=9 action=CANCEL_PIPELINE deploy-auth-patch-1.8.2 reward=-0.02 done=false error=null
+[STEP] step=10 action=SWITCH_DESK RELEASE reward=0.01 done=false error=null
+[STEP] step=11 action=CANCEL_PIPELINE deploy-auth-patch-1.8.2 reward=0.00 done=false error=null
+[STEP] step=12 action=CANCEL_PIPELINE deploy-auth-patch-1.8.2 reward=0.00 done=false error=null
+[STEP] step=13 action=CANCEL_PIPELINE deploy-auth-patch-1.8.2 reward=0.00 done=false error=null
+[STEP] step=14 action=CANCEL_PIPELINE deploy-auth-patch-1.8.2 reward=0.00 done=false error=null
+[STEP] step=15 action=CANCEL_PIPELINE deploy-auth-patch-1.8.2 reward=0.00 done=false error=null
+[STEP] step=16 action=SWITCH_DESK SECURITY reward=0.00 done=true error=null
+[END] success=false steps=16 score=0.20 rewards=0.02,0.01,0.02,-0.02,-0.02,-0.02,0.01,0.15,-0.02,0.01,0.00,0.00,0.00,0.00,0.00,0.00
+[START] task=data_pipeline_regression env=opstwin_recovery model=Qwen/Qwen3-8B
+[STEP] step=1 action=SWITCH_DESK INCIDENT_COMMAND reward=0.01 done=false error=null
+[STEP] step=2 action=ASSESS_BLAST_RADIUS reward=0.02 done=false error=null
+[STEP] step=3 action=SWITCH_DESK SRE reward=0.01 done=false error=null
+[STEP] step=4 action=INSPECT_RUNBOOK analytics-pipeline reward=0.02 done=false error=null
+[STEP] step=5 action=ROLLBACK_DEPLOYMENT 12345 reward=-0.02 done=false error=null
+[STEP] step=6 action=ROLLBACK_DEPLOYMENT 12345 reward=-0.02 done=false error=null
+[STEP] step=7 action=ROLLBACK_DEPLOYMENT 12345 reward=-0.02 done=false error=null
+[STEP] step=8 action=ROLLBACK_DEPLOYMENT 12345 reward=-0.02 done=false error=null
+[STEP] step=9 action=ROLLBACK_DEPLOYMENT 12345 reward=-0.02 done=false error=null
+[STEP] step=10 action=ASSESS_BLAST_RADIUS reward=-0.02 done=false error=null
+[STEP] step=11 action=SWITCH_DESK INCIDENT_COMMAND reward=0.00 done=false error=null
+[STEP] step=12 action=SWITCH_DESK SRE reward=0.00 done=false error=null
+[STEP] step=13 action=ASSESS_BLAST_RADIUS reward=-0.02 done=false error=null
+[STEP] step=14 action=ASSESS_BLAST_RADIUS reward=-0.02 done=true error=null
+[END] success=false steps=14 score=0.20 rewards=0.01,0.02,0.01,0.02,-0.02,-0.02,-0.02,-0.02,-0.02,-0.02,0.00,0.00,-0.02,-0.02
+[START] task=false_positive env=opstwin_recovery model=Qwen/Qwen3-8B
+[STEP] step=1 action=REQUEST_INFO summary reward=0.00 done=false error=null
+[STEP] step=2 action=SWITCH_DESK INCIDENT_COMMAND reward=0.01 done=false error=null
+[STEP] step=3 action=ASSESS_BLAST_RADIUS reward=0.01 done=false error=null
+[STEP] step=4 action=ASSESS_BLAST_RADIUS reward=0.00 done=false error=null
+[STEP] step=5 action=SWITCH_DESK SRE reward=0.01 done=false error=null
+[STEP] step=6 action=ISOLATE_SERVICE auth-svc reward=0.00 done=false error=null
+[STEP] step=7 action=ISOLATE_SERVICE auth-svc reward=0.00 done=false error=null
+[STEP] step=8 action=ISOLATE_SERVICE auth-svc reward=0.00 done=false error=null
+[STEP] step=9 action=ISOLATE_SERVICE auth-svc reward=0.00 done=false error=null
+[STEP] step=10 action=ASSESS_BLAST_RADIUS reward=-0.02 done=true error=null
+[END] success=true steps=10 score=0.76 rewards=0.00,0.01,0.01,0.00,0.01,0.00,0.00,0.00,0.00,-0.02
