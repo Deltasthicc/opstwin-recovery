@@ -1,0 +1,159 @@
+======================================================================
+OpsTwin Rollout Capture — 20260420_144234
+Model: ./sft_checkpoints/adapter
+GPU:   NVIDIA GeForce RTX 5090
+======================================================================
+
+Loading tokenizer + model...
+Model loaded.
+
+
+======================================================================
+TASK: bad_release
+======================================================================
+
+INITIAL STATE:
+  total_issues: 7
+  incident:     Checkout service degraded 10 min after deploy-checkout-v2.3.1. Error rate 4.2%, latency p99 > 5s. 31 customers affected. VIP account Aria Co
+  services:     ['analytics-svc', 'auth-svc', 'checkout-svc', 'payment-svc']
+  pipelines:    ['deploy-checkout-v2.3.1', 'flag-checkout-beta']
+  tickets:      [('T-001', 'P2', False), ('T-002', 'P2', False), ('T-003', 'P1', True)]
+
+HIDDEN STATE (ground truth):
+  root_cause:    flag_checkout_v2_ui
+
+ROLLOUT:
+
+  --- step 1 ---
+  RAW MODEL: '<think>\n\n</think>\n\nSWITCH_DESK INCIDENT_COMMAND'
+  EXTRACTED: 'SWITCH_DESK INCIDENT_COMMAND'
+  REWARD:    +0.010
+  FEEDBACK:  Switched to INCIDENT_COMMAND desk.
+  RESOLVED:  0/7
+
+  EXCEPTION: 'OpsObservation' object has no attribute 'error'
+Traceback (most recent call last):
+  File "/home/shashwat/opstwin-work/opstwin-recovery/capture_everything.py", line 136, in <module>
+    if obs_new.error:
+       ^^^^^^^^^^^^^
+  File "/home/shashwat/opstwin-work/.venv/lib/python3.14/site-packages/pydantic/main.py", line 1042, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'OpsObservation' object has no attribute 'error'
+
+
+======================================================================
+TASK: security_cve
+======================================================================
+
+INITIAL STATE:
+  total_issues: 8
+  incident:     CVE-2024-38812 detected in auth-svc dependency libcurl 8.4.0. Suspicious process spotted on pod auth-7f9d. Enterprise accounts cannot authen
+  services:     ['api-gateway', 'auth-svc', 'user-data-svc']
+  pipelines:    ['deploy-auth-patch-1.8.2']
+  tickets:      [('T-001', 'P1', False), ('T-002', 'P1', True), ('T-003', 'P2', False)]
+
+HIDDEN STATE (ground truth):
+  root_cause:    cve_libcurl_exploited
+
+ROLLOUT:
+
+  --- step 1 ---
+  RAW MODEL: '<think>\n\n</think>\n\nSWITCH_DESK INCIDENT_COMMAND'
+  EXTRACTED: 'SWITCH_DESK INCIDENT_COMMAND'
+  REWARD:    +0.010
+  FEEDBACK:  Switched to INCIDENT_COMMAND desk.
+  RESOLVED:  0/8
+
+  EXCEPTION: 'OpsObservation' object has no attribute 'error'
+Traceback (most recent call last):
+  File "/home/shashwat/opstwin-work/opstwin-recovery/capture_everything.py", line 136, in <module>
+    if obs_new.error:
+       ^^^^^^^^^^^^^
+  File "/home/shashwat/opstwin-work/.venv/lib/python3.14/site-packages/pydantic/main.py", line 1042, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'OpsObservation' object has no attribute 'error'
+
+
+======================================================================
+TASK: data_pipeline_regression
+======================================================================
+
+INITIAL STATE:
+  total_issues: 8
+  incident:     ETL pipeline failed at step 3 of 7. analytics-pipeline returning -34% row count. billing-svc receiving null values. Monthly invoices wrong f
+  services:     ['analytics-pipeline', 'billing-svc', 'payment-svc', 'reporting-svc']
+  pipelines:    ['billing-reconcile-job', 'etl-pipeline-nightly']
+  tickets:      [('T-001', 'P1', False), ('T-002', 'P2', False), ('T-003', 'P1', False), ('T-004', 'P2', True)]
+
+HIDDEN STATE (ground truth):
+  root_cause:    schema_change_unreleased_analytics
+
+ROLLOUT:
+
+  --- step 1 ---
+  RAW MODEL: '<think>\n\n</think>\n\nSWITCH_DESK INCIDENT_COMMAND'
+  EXTRACTED: 'SWITCH_DESK INCIDENT_COMMAND'
+  REWARD:    +0.010
+  FEEDBACK:  Switched to INCIDENT_COMMAND desk.
+  RESOLVED:  0/8
+
+  EXCEPTION: 'OpsObservation' object has no attribute 'error'
+Traceback (most recent call last):
+  File "/home/shashwat/opstwin-work/opstwin-recovery/capture_everything.py", line 136, in <module>
+    if obs_new.error:
+       ^^^^^^^^^^^^^
+  File "/home/shashwat/opstwin-work/.venv/lib/python3.14/site-packages/pydantic/main.py", line 1042, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'OpsObservation' object has no attribute 'error'
+
+
+======================================================================
+TASK: false_positive
+======================================================================
+
+INITIAL STATE:
+  total_issues: 3
+  incident:     Suspicious traffic on auth-svc, CVE flagged on a dependency. Surface reading says 'security incident'. But the traffic might be a health che
+  services:     ['api-gateway', 'auth-svc']
+  pipelines:    ['deploy-auth-v1.9.0']
+  tickets:      []
+
+HIDDEN STATE (ground truth):
+  root_cause:    false_positive_auth_healthcheck
+
+ROLLOUT:
+
+  --- step 1 ---
+  RAW MODEL: '<think>\n\n</think>\n\nSWITCH_DESK INCIDENT_COMMAND'
+  EXTRACTED: 'SWITCH_DESK INCIDENT_COMMAND'
+  REWARD:    +0.010
+  FEEDBACK:  Switched to INCIDENT_COMMAND desk.
+  RESOLVED:  0/3
+
+  EXCEPTION: 'OpsObservation' object has no attribute 'error'
+Traceback (most recent call last):
+  File "/home/shashwat/opstwin-work/opstwin-recovery/capture_everything.py", line 136, in <module>
+    if obs_new.error:
+       ^^^^^^^^^^^^^
+  File "/home/shashwat/opstwin-work/.venv/lib/python3.14/site-packages/pydantic/main.py", line 1042, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'OpsObservation' object has no attribute 'error'
+
+
+======================================================================
+SUMMARY
+======================================================================
+Average trained score: 0.000
+Baseline (untrained):  0.360
+Random:                0.240
+Heuristic (ceiling):   0.990
+
+  bad_release                    0.000  (0/0 resolved)
+  security_cve                   0.000  (0/0 resolved)
+  data_pipeline_regression       0.000  (0/0 resolved)
+  false_positive                 0.000  (0/0 resolved)
+
+Artifacts written:
+  captures/rollout_20260420_144234.log
+  captures/rollout_20260420_144234.jsonl
+  captures/rollout_20260420_144234_summary.json

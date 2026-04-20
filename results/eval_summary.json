@@ -1,0 +1,140 @@
+{
+  "random": {
+    "bad_release": {
+      "policy": "random",
+      "n_seeds": 5,
+      "mean_score": 0.239,
+      "std_score": 0.0096,
+      "min_score": 0.225,
+      "max_score": 0.25,
+      "mean_reward": -0.006,
+      "raw_scores": [
+        0.225,
+        0.24,
+        0.25,
+        0.245,
+        0.235
+      ]
+    },
+    "security_cve": {
+      "policy": "random",
+      "n_seeds": 5,
+      "mean_score": 0.221,
+      "std_score": 0.0129,
+      "min_score": 0.205,
+      "max_score": 0.235,
+      "mean_reward": -0.018,
+      "raw_scores": [
+        0.205,
+        0.225,
+        0.235,
+        0.23,
+        0.21
+      ]
+    },
+    "data_pipeline_regression": {
+      "policy": "random",
+      "n_seeds": 5,
+      "mean_score": 0.239,
+      "std_score": 0.0096,
+      "min_score": 0.225,
+      "max_score": 0.25,
+      "mean_reward": -0.006,
+      "raw_scores": [
+        0.225,
+        0.24,
+        0.25,
+        0.245,
+        0.235
+      ]
+    }
+  },
+  "heuristic": {
+    "bad_release": {
+      "policy": "heuristic",
+      "n_seeds": 1,
+      "mean_score": 0.99,
+      "std_score": 0.0,
+      "min_score": 0.99,
+      "max_score": 0.99,
+      "mean_reward": 1.12,
+      "raw_scores": [
+        0.99
+      ]
+    },
+    "security_cve": {
+      "policy": "heuristic",
+      "n_seeds": 1,
+      "mean_score": 0.99,
+      "std_score": 0.0,
+      "min_score": 0.99,
+      "max_score": 0.99,
+      "mean_reward": 1.07,
+      "raw_scores": [
+        0.99
+      ]
+    },
+    "data_pipeline_regression": {
+      "policy": "heuristic",
+      "n_seeds": 1,
+      "mean_score": 0.99,
+      "std_score": 0.0,
+      "min_score": 0.99,
+      "max_score": 0.99,
+      "mean_reward": 1.1,
+      "raw_scores": [
+        0.99
+      ]
+    }
+  },
+  "trained": {
+    "bad_release": {
+      "policy": "trained",
+      "n_seeds": 5,
+      "mean_score": 0.185,
+      "std_score": 0.0,
+      "min_score": 0.185,
+      "max_score": 0.185,
+      "mean_reward": -0.28,
+      "raw_scores": [
+        0.185,
+        0.185,
+        0.185,
+        0.185,
+        0.185
+      ]
+    },
+    "security_cve": {
+      "policy": "trained",
+      "n_seeds": 5,
+      "mean_score": 0.16,
+      "std_score": 0.0,
+      "min_score": 0.16,
+      "max_score": 0.16,
+      "mean_reward": -0.32,
+      "raw_scores": [
+        0.16,
+        0.16,
+        0.16,
+        0.16,
+        0.16
+      ]
+    },
+    "data_pipeline_regression": {
+      "policy": "trained",
+      "n_seeds": 5,
+      "mean_score": 0.185,
+      "std_score": 0.0,
+      "min_score": 0.185,
+      "max_score": 0.185,
+      "mean_reward": -0.28,
+      "raw_scores": [
+        0.185,
+        0.185,
+        0.185,
+        0.185,
+        0.185
+      ]
+    }
+  }
+}
