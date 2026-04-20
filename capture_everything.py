@@ -1,17 +1,4 @@
-"""
-capture_everything.py — run the trained model against all scenarios with
-COMPLETE logging of raw output, extracted command, env response, reward,
-and observation deltas. Writes three artifact files per run.
-
-Usage:
-    python capture_everything.py ./sft_checkpoints/adapter
-    python capture_everything.py Deltasthic/opstwin-qwen3-1.7b-sft
-
-Outputs (all in ./captures/):
-    rollout_<timestamp>.log         - full human-readable trace
-    rollout_<timestamp>.jsonl       - one row per step, machine-readable
-    rollout_<timestamp>_summary.json - final per-task scores
-"""
+"""Complete rollout capture with bulletproof attribute access."""
 import sys, re, json, torch, traceback
 from pathlib import Path
 from datetime import datetime
@@ -35,14 +22,19 @@ SUMMARY_PATH = OUT_DIR / f"rollout_{TIMESTAMP}_summary.json"
 log_file = open(LOG_PATH, "w")
 jsonl_file = open(JSONL_PATH, "w")
 
-
 def log(*args):
-    """Print to stdout AND write to log file."""
     msg = " ".join(str(a) for a in args)
     print(msg)
     log_file.write(msg + "\n")
     log_file.flush()
 
+def g(obj, attr, default=None):
+    """Safely get Pydantic or plain attribute."""
+    try:
+        v = getattr(obj, attr, default)
+        return v if v is not None else default
+    except Exception:
+        return default
 
 def robust_extract(text):
     text = _extract_command(text)
@@ -51,20 +43,26 @@ def robust_extract(text):
     text = text.split(" -> ")[0].strip().strip('`"\'')
     return text
 
-
 log(f"=" * 70)
 log(f"OpsTwin Rollout Capture — {TIMESTAMP}")
 log(f"Model: {MODEL_PATH}")
 log(f"GPU:   {torch.cuda.get_device_name(0)}")
 log(f"=" * 70)
-
 log(f"\nLoading tokenizer + model...")
+
 tok = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
 mdl = AutoModelForCausalLM.from_pretrained(
     MODEL_PATH, dtype=torch.bfloat16, device_map="auto", trust_remote_code=True)
 mdl.eval()
 log(f"Model loaded.\n")
 
+# Show what fields OpsObservation actually has (one-time diagnostic)
+env_probe = OpsTwinEnvironment()
+probe_obs = env_probe.reset(task="bad_release")
+available_fields = sorted(probe_obs.__class__.model_fields.keys()) \
+    if hasattr(probe_obs.__class__, "model_fields") \
+    else [a for a in dir(probe_obs) if not a.startswith("_")]
+log(f"OpsObservation fields available: {available_fields}\n")
 
 def act(step, obs, prev_r, hist):
     prompt = build_user_prompt(step, obs, prev_r, hist)
@@ -100,15 +98,13 @@ for task in ["bad_release", "security_cve", "data_pipeline_regression", "false_p
         env = OpsTwinEnvironment()
         initial_obs = env.reset(task=task)
 
-        # Log the full initial observation so we can see what the model sees
         log(f"\nINITIAL STATE:")
-        log(f"  total_issues: {initial_obs.total_issues_count}")
-        log(f"  incident:     {initial_obs.incident_description[:140]}")
-        log(f"  services:     {[s['id'] for s in initial_obs.services]}")
-        log(f"  pipelines:    {[p.get('id') for p in initial_obs.pipelines if p.get('id')]}")
-        log(f"  tickets:      {[(t['id'], t.get('priority'), t.get('is_vip', False)) for t in initial_obs.tickets]}")
+        log(f"  total_issues: {g(initial_obs, 'total_issues_count', 0)}")
+        log(f"  incident:     {g(initial_obs, 'incident_description', '')[:140]}")
+        log(f"  services:     {[s.get('id') for s in g(initial_obs, 'services', [])]}")
+        log(f"  pipelines:    {[p.get('id') for p in g(initial_obs, 'pipelines', []) if p.get('id')]}")
+        log(f"  tickets:      {[(t.get('id'), t.get('priority'), t.get('is_vip', False)) for t in g(initial_obs, 'tickets', [])]}")
 
-        # Log the hidden state to catch mismatches with what the model guesses
         hidden = env._hidden
         log(f"\nHIDDEN STATE (ground truth):")
         log(f"  root_cause:    {hidden.get_root_cause() if hasattr(hidden, 'get_root_cause') else '?'}")
@@ -121,53 +117,65 @@ for task in ["bad_release", "security_cve", "data_pipeline_regression", "false_p
         obs = initial_obs
         hist, prev_r = [], 0.0
         cumulative_reward = 0.0
+        final_score = 0.0
+        final_resolved = 0
+        final_total = 0
 
-        for step in range(1, env._max_steps + 1):
+        for step in range(1, g(env, '_max_steps', 20) + 1):
             action, raw, prompt = act(step, obs, prev_r, hist)
             obs_new = env.step(OpsAction(command=action))
 
-            # Log every detail
+            reward = g(obs_new, 'reward', 0.0)
+            score = g(obs_new, 'score', 0.0)
+            resolved = g(obs_new, 'resolved_issues_count', 0)
+            total = g(obs_new, 'total_issues_count', 0)
+            feedback = g(obs_new, 'message', '') or ''
+            done = g(obs_new, 'done', False)
+            error = g(obs_new, 'error', None)
+
             log(f"\n  --- step {step} ---")
             log(f"  RAW MODEL: {raw[:200]!r}")
             log(f"  EXTRACTED: {action!r}")
-            log(f"  REWARD:    {obs_new.reward:+.3f}")
-            log(f"  FEEDBACK:  {obs_new.message[:200] if obs_new.message else '(none)'}")
-            log(f"  RESOLVED:  {obs_new.resolved_issues_count}/{obs_new.total_issues_count}")
-            if getattr(obs_new, "error", None):
-                log(f"  ERROR:     {obs_new.error}")
+            log(f"  REWARD:    {reward:+.3f}")
+            log(f"  FEEDBACK:  {feedback[:200] if feedback else '(none)'}")
+            log(f"  RESOLVED:  {resolved}/{total}")
+            if error:
+                log(f"  ERROR:     {error}")
 
-            # JSONL row (machine-readable)
             jsonl_file.write(json.dumps({
                 "task": task,
                 "step": step,
                 "raw_output": raw,
                 "extracted_command": action,
-                "reward": obs_new.reward,
-                "cumulative_reward": cumulative_reward + obs_new.reward,
-                "score": obs_new.score,
-                "resolved": obs_new.resolved_issues_count,
-                "total": obs_new.total_issues_count,
-                "error": obs_new.error,
-                "feedback": obs_new.message[:300] if obs_new.message else None,
-                "done": obs_new.done,
+                "reward": reward,
+                "cumulative_reward": cumulative_reward + reward,
+                "score": score,
+                "resolved": resolved,
+                "total": total,
+                "error": error,
+                "feedback": feedback[:300] if feedback else None,
+                "done": done,
             }) + "\n")
             jsonl_file.flush()
 
-            cumulative_reward += obs_new.reward
-            hist.append(f"S{step}: {action} -> {obs_new.reward:+.2f}")
+            cumulative_reward += reward
+            hist.append(f"S{step}: {action} -> {reward:+.2f}")
             hist = hist[-5:]
-            prev_r = obs_new.reward
+            prev_r = reward
             obs = obs_new
-            if obs.done:
+            final_score = score
+            final_resolved = resolved
+            final_total = total
+
+            if done:
                 break
 
-        log(f"\n  FINAL SCORE: {obs.score:.3f}  "
-            f"({obs.resolved_issues_count}/{obs.total_issues_count} resolved, "
-            f"{step} steps)")
+        log(f"\n  FINAL SCORE: {final_score:.3f}  "
+            f"({final_resolved}/{final_total} resolved, {step} steps)")
         results[task] = {
-            "score": obs.score,
-            "resolved": obs.resolved_issues_count,
-            "total": obs.total_issues_count,
+            "score": final_score,
+            "resolved": final_resolved,
+            "total": final_total,
             "steps": step,
         }
 

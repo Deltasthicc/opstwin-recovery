@@ -1,0 +1,31 @@
+{
+  "timestamp": "20260420_145634",
+  "model": "./sft_checkpoints/adapter",
+  "average_score": 0.7360249999999999,
+  "per_task": {
+    "bad_release": {
+      "score": 0.4174,
+      "resolved": 2,
+      "total": 7,
+      "steps": 14
+    },
+    "security_cve": {
+      "score": 0.9365,
+      "resolved": 7,
+      "total": 8,
+      "steps": 16
+    },
+    "data_pipeline_regression": {
+      "score": 0.7525,
+      "resolved": 5,
+      "total": 8,
+      "steps": 14
+    },
+    "false_positive": {
+      "score": 0.8377,
+      "resolved": 2,
+      "total": 3,
+      "steps": 10
+    }
+  }
+}
