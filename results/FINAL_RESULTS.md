@@ -2,13 +2,13 @@
 
 ## Model
 - **Base:** Qwen/Qwen3-1.7B (1.72B parameters)
-- **Method:** Full fine-tune (no LoRA) on 2774 expert trajectories
+- **Method:** Full fine-tune on 2774 expert trajectories
 - **Hardware:** NVIDIA RTX 5090 (32 GB VRAM)
-- **Wall time:** 16.4 minutes (984 seconds, 434 steps, 2 epochs)
+- **Wall time:** 16.4 minutes (434 steps, 2 epochs)
 - **Final eval loss:** 0.02 (token accuracy 99.3%)
 - **Hugging Face:** [Deltasthic/opstwin-qwen3-1.7b-sft](https://huggingface.co/Deltasthic/opstwin-qwen3-1.7b-sft)
 
-## Results
+## Results (deterministic, greedy decoding)
 
 | Scenario | Random | Untrained LLM | **Trained** | Heuristic |
 |----------|--------|---------------|-------------|-----------|
@@ -18,21 +18,25 @@
 | false_positive | 0.24 | 0.85 | **0.84** | 0.99 |
 | **Average** | **0.24** | **0.36** | **0.74** | **0.99** |
 
-## Training hyperparameters
-- Learning rate: 1e-5 (cosine schedule, 30-step warmup)
-- Batch size: 4 per device x 4 accumulation = 16 effective
-- Precision: bfloat16
-- Gradient checkpointing: enabled
-- Eval every 25 steps, log every 5 steps
+Stochastic sampling (T=0.3, 5 seeds): ~0.63 average — shown in evaluate.py chart.
+Deterministic (T=0.0, greedy): ~0.74 average — closer to production behavior.
 
-## Dataset composition
-- 4 hand-authored scenarios (OPTIMAL_TRAJECTORIES)
-- ~300 procedural trajectories across 3 families x 2 difficulties x 50 seeds
-- Total: 2774 (observation, action) training pairs
-- 95/5 train/eval split
+## Key takeaway
+Training more than doubled baseline performance. Biggest win on
+security_cve (0.20 → 0.94), demonstrating the model learned complex
+multi-step policies: assess blast radius → refresh stale approvals
+→ rerun pipelines → prioritize VIP tickets → draft communications.
 
-## Known limitations (deferred to v3)
-- bad_release (0.42) because model hallucinates flag names instead of
-  copying the exact name from environment feedback during inspection
-- Occasional action repetition after scenario completion
-- No explicit curriculum, data weighting, or entity-copying signal
+## Known v1 limitations (target for v3)
+- bad_release (0.42): model hallucinates feature-flag names instead
+  of copying the exact name from the env's runbook feedback.
+- No explicit entity-copying signal in training data.
+- Model fills remaining steps with plausible-looking repeat actions
+  after main incident is resolved.
+
+## Reproducibility
+- Training script: `train_sft_5090.py`
+- Evaluation script: `evaluate.py` (patched for <think> tags)
+- Detailed rollout: `capture_everything.py`
+- Full rollout log: `captures/rollout_20260420_145634.log`
+- Environment frozen: `requirements_v1_frozen.txt`
