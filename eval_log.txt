@@ -1,0 +1,18 @@
+W0420 14:21:57.572000 2276411 torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W0420 14:21:57.584000 2276411 torch/utils/_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+Evaluating random policy...
+Evaluating heuristic policy...
+Evaluating trained model at Deltasthic/opstwin-qwen3-1.7b-sft...
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:  18%|█▊        | 55/310 [00:00<00:00, 548.08it/s]Loading weights:  55%|█████▍    | 170/310 [00:00<00:00, 890.21it/s]Loading weights:  95%|█████████▍| 294/310 [00:00<00:00, 1047.64it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 988.42it/s] 
+
+Results written to /home/shashwat/opstwin-work/opstwin-recovery/results/eval_summary.json
+  random     bad_release                  mean=0.239 std=0.010
+  random     security_cve                 mean=0.221 std=0.013
+  random     data_pipeline_regression     mean=0.239 std=0.010
+  heuristic  bad_release                  mean=0.990 std=0.000
+  heuristic  security_cve                 mean=0.990 std=0.000
+  heuristic  data_pipeline_regression     mean=0.990 std=0.000
+  trained    bad_release                  mean=0.185 std=0.000
+  trained    security_cve                 mean=0.160 std=0.000
+  trained    data_pipeline_regression     mean=0.185 std=0.000
+Chart saved to /home/shashwat/opstwin-work/opstwin-recovery/results/eval_curve.png
