@@ -153,8 +153,14 @@ def trajectory_to_examples(env_kwargs, augment=False):
 
 
 def build_dataset(seeds_per_family=300, difficulties=("easy", "medium", "hard"),
-                  eval_seed_cutoff=270):
-    """Seeds < cutoff go to train. Seeds >= cutoff go to eval. No cross-split leakage."""
+                  eval_frac=0.10):
+    """Seeds < cutoff go to train, seeds >= cutoff go to eval. No cross-split leakage.
+    cutoff is derived as int(seeds_per_family * (1 - eval_frac)), with a minimum of
+    seeds_per_family - 2 so even small dry runs get at least a couple eval seeds."""
+    eval_seed_cutoff = max(1, min(seeds_per_family - 2,
+                                  int(seeds_per_family * (1 - eval_frac))))
+    print(f"  eval_seed_cutoff={eval_seed_cutoff} "
+          f"(seeds {eval_seed_cutoff}..{seeds_per_family-1} held out for eval)")
     train_examples, eval_examples = [], []
     kept = dropped = 0
 
@@ -298,13 +304,16 @@ class RolloutEvalCallback(TrainerCallback):
 # -----------------------------------------------------------------------------
 
 def main():
+    import os
+    os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="Qwen/Qwen3-4B")
     parser.add_argument("--hf-model-id", default="Deltasthic/opstwin-qwen3-4b-sft-v3")
     parser.add_argument("--epochs", type=int, default=5)
     parser.add_argument("--lora-rank", type=int, default=0,
                         help="0 for full fine-tune (5090 has VRAM for 4B full FT at batch=2)")
-    parser.add_argument("--batch-size", type=int, default=2)
+    parser.add_argument("--batch-size", type=int, default=1)
     parser.add_argument("--lr", type=float, default=1e-5)
     parser.add_argument("--seeds", type=int, default=300,
                         help="seeds_per_family for the procedural generator")
@@ -400,7 +409,7 @@ def main():
         gradient_accumulation_steps=max(1, 32 // args.batch_size),
         learning_rate=args.lr,
         lr_scheduler_type="cosine",
-        warmup_ratio=0.03,
+        warmup_steps=50,
         weight_decay=0.01,
         logging_steps=10,
         eval_strategy="steps",
@@ -413,9 +422,10 @@ def main():
         greater_is_better=False,
         bf16=True,
         gradient_checkpointing=(args.lora_rank == 0),
-        optim="adamw_torch",
-        max_length=2048,
+        optim="adamw_8bit",
+        max_length=1024,
         packing=False,
+        use_liger_kernel=True,
         report_to="none",
         seed=42,
     )
