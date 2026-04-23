@@ -1,3 +1,23 @@
+---
+title: OpsTwin Recovery Arena
+emoji: 🛠️
+colorFrom: indigo
+colorTo: red
+sdk: docker
+app_port: 8000
+pinned: false
+license: mit
+short_description: Enterprise incident response OpenEnv environment
+tags:
+  - openenv
+  - reinforcement-learning
+  - multi-agent
+  - incident-response
+  - world-model
+---
+
+<!-- The YAML block above is HuggingFace Spaces metadata. Do not move it. -->
+
 # OpsTwin Recovery Arena
 
 **OpenEnv environment for training LLM agents on enterprise incident response.**

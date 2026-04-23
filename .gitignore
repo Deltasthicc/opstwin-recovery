@@ -71,7 +71,9 @@ ipython_config.py
 # ==========================================================================
 .env.local
 .venv/
+.venv-*/
 venv/
+venv-*/
 env/
 ENV/
 env.bak/
@@ -171,3 +173,10 @@ $RECYCLE.BIN/
 # Notebooks we use for scratch analysis -- keep the folder but not contents
 notebooks/*.ipynb
 !notebooks/.gitkeep
+# The Colab training notebook is a hackathon submission deliverable, keep it.
+!notebooks/opstwin_training_colab.ipynb
+
+# ==========================================================================
+# External / reference documents (not part of the submission)
+# ==========================================================================
+\[External\]*.md

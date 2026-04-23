@@ -1,0 +1,66 @@
+# Only ship what the server container actually needs.
+# The Dockerfile explicitly COPYs models.py and server/, so everything else
+# below is defense-in-depth (protects future COPY . lines and keeps HF Spaces
+# build context small).
+
+# VCS, CI, env
+.git/
+.github/
+.gitignore
+.gitattributes
+.env
+.env.*
+!.env.example
+.hf_token
+
+# Python runtime cruft
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.egg-info/
+build/
+dist/
+.venv/
+.venv-*/
+venv/
+venv-*/
+
+# Training artefacts (never needed at serve time)
+checkpoints/
+checkpoints-*/
+runs/
+sft_dataset.jsonl
+results/
+captures/
+baselines/trajectories/postmortems*.jsonl
+
+# Training / eval scripts and notebooks do not belong in the serve image
+train.py
+train_sft_5090.py
+evaluate.py
+rollout.py
+capture_everything.py
+inference.py
+notebooks/
+demo-assets/
+
+# Tests, docs, rubrics
+tests/
+docs/
+PRE_PUSH_CHECKLIST.md
+CLAUDE.md
+README.md
+[External]*.md
+
+# Editor / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
