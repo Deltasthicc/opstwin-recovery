@@ -7,8 +7,8 @@ Submission: Meta PyTorch OpenEnv Hackathon Grand Finale, Bangalore, April 25 to 
 - [x] **W1** Uses latest OpenEnv (`openenv-core==0.2.3`).
 - [x] **W1** Minimal TRL training script runnable in Colab. See `notebooks/opstwin_training_colab.ipynb`.
 - [ ] **W2** Environment hosted on HuggingFace Spaces. Artifacts ready; deploy commands in `DEPLOY_SPACE.md`. User must run.
-- [ ] **W3** Mini-blog on HF OR YouTube video under 2 min. Not started.
-- [ ] **W4** Fill `demo-assets/` with actual content (blog draft, video script, published URLs).
+- [~] **W3** Mini-blog + YouTube video. Blog drafted at `demo-assets/blog-post.md` (635 words). Video script at `demo-assets/video-script.md` (~1:37 runtime). Neither is published yet.
+- [~] **W4** `demo-assets/` has blog draft and script. Still missing: hf-blog-link.txt, youtube-link.txt, hf-space-link.txt (all populated after publishing).
 
 ## Current Scoring Estimate
 
@@ -24,7 +24,13 @@ Current `origin` URL has a GitHub PAT embedded in `.git/config`.
 3. Use `gh auth login` or a credential helper.
 
 ### Push main to GitHub
-`git push origin main`  (fast-forward only, includes the v3-better-training commits).
+BLOCKED until GitHub auth is fixed (2026-04-23). The embedded PAT in `.git/config` is invalid.
+Fix with ONE of:
+- `gh auth login` then `git remote set-url origin https://github.com/Deltasthicc/opstwin-recovery.git` then `git push origin main`
+- Or new fine-grained PAT with credential.helper store
+- Or SSH key: `git remote set-url origin git@github.com:Deltasthicc/opstwin-recovery.git`
+
+After push works, revoke the old token at https://github.com/settings/tokens.
 
 ### Deploy to HuggingFace Space (see `DEPLOY_SPACE.md`)
 1. `huggingface-cli login`
