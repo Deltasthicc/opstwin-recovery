@@ -43,10 +43,10 @@ After push works, revoke the old token at https://github.com/settings/tokens.
 ### Colab notebook smoke
 Open `notebooks/opstwin_training_colab.ipynb` in Colab (Free tier T4), run all cells, confirm the loss curve + rollout print appear. Should take ~4 min.
 
-## Known Issues (not rubric blockers)
+## Known Issues
 
-- Default `env.reset()` without a task arg returns `done=True` after one REQUEST_INFO step. Probably a small fallback scenario. Investigate during Colab run; not urgent for minimums.
-- `bad_release` scenario trained score still at 0.42 (V1). v3-better-training branch attempts to fix this through wrong-name augmentation and VERIFY_FLAG coverage; evaluation of v3 checkpoint not yet run.
+- ~~Default `env.reset()` without a task arg returns `done=True` after one REQUEST_INFO step.~~ FIXED: `server/app.py` now uses a single shared env instance so HTTP state persists across `/reset` and `/step`. Smoke test asserts `total_issues > 0` on reset and `done is False` after one REQUEST_INFO.
+- `bad_release` scenario trained score still at 0.42 (V1). `train_sft_v3.py` on main attempts to fix this through wrong-name augmentation and VERIFY_FLAG coverage; evaluation of v3 checkpoint not yet run.
 - Postmortem memory loop (Phase 4) not confirmed in main. Ablation table for judges would be nice to have.
 
 ## Checkpoint 2 Targets (post-minimums)

@@ -57,18 +57,25 @@ def main() -> int:
         o = obs["observation"]
         assert o.get("active_desk") is not None
         assert isinstance(o.get("available_commands"), list) and len(o["available_commands"]) > 0
+        total = o.get("total_issues_count", 0)
+        assert total > 0, f"scenario should load with issues > 0 (got {total})"
         print(f"  /reset ............ OK  desk={o['active_desk']}  "
-              f"services={len(o.get('services', []))}  tickets={len(o.get('tickets', []))}")
+              f"services={len(o.get('services', []))}  tickets={len(o.get('tickets', []))}  "
+              f"total_issues={total}")
     except Exception as e:
         print(f"  /reset ............ FAIL ({e})")
         return 1
 
     # 3. Step: a safe read-only action that every desk accepts.
+    #    A single REQUEST_INFO must NOT terminate the episode. If done=True
+    #    here, state is not being preserved between /reset and /step.
     try:
         resp = _post(f"{base}/step", {"action": {"command": "REQUEST_INFO summary"}})
         assert "observation" in resp, resp
         assert isinstance(resp.get("reward"), (int, float)), resp.get("reward")
         assert isinstance(resp.get("done"), bool), resp.get("done")
+        assert resp["done"] is False, \
+            "one REQUEST_INFO terminated the episode; env state is not persisted across HTTP calls"
         print(f"  /step REQUEST_INFO  OK  reward={resp['reward']:.4f}  done={resp['done']}")
     except Exception as e:
         print(f"  /step REQUEST_INFO  FAIL ({e})")
