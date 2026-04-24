@@ -55,12 +55,14 @@ Both fixes are applied to the evaluator for V3's numbers in this report. V1's pu
 
 ## Artifacts
 
-- Eval summary JSON: `results/eval_summary_v3.json` (V3 Stage 3 step-45), `results/eval_summary.json` (original V1 eval, preserved)
-- Bar chart: `results/eval_curve_v3.png` (V3 Stage 3 step-45)
+- Eval summary JSON: `results/eval_summary.json` (V3 Stage 3 step-45, **5 held-out seeds**), `results/eval_summary_v1.json` (original V1 eval, preserved)
+- Bar chart: `results/eval_curve.png` (V3 Stage 3 step-45), `results/eval_curve_v1.png` (V1, preserved)
 - Training loss curve: `results/training_loss_curve.png` (Stage 1 + 2 + 3 combined)
-- Training logs: `training_log.txt` (Stage 1), `training_v3_stage2.log`, `training_v3_stage3.log`
+- Training logs: `training_log.txt` (Stage 1), `training_v3_stage2.log`, `training_v3_stage3.log`, `eval_v3_final_5seed.log` (final 5-seed eval)
+- Raw eval per-checkpoint dump: `results_v3_stage3_step45/` (3-seed eval used during stage-3 verification, kept for the audit trail)
 - Training scripts: `train_sft_v3.py` (Stage 1), `train_sft_v3_stage2.py` (Stage 2 rebalance), `train_sft_v3_stage3.py` (Stage 3 DP focus + BR guard)
 - Evaluator (with both bugfixes): `evaluate.py`
+- Helper scripts: `scripts/plot_training_curve.py`, `scripts/push_v3_step75.py`, `scripts/diagnose_callback_vs_evaluator.py`, `scripts/diagnose_v1_stack_drift.py`
 
 ## Reproduction
 

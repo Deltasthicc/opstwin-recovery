@@ -54,9 +54,12 @@ Open `notebooks/opstwin_training_colab.ipynb` in Colab (Free tier T4), run all c
 - [x] Run v3 training on the 5090, push new checkpoint. Published as
       `Deltasthic/opstwin-qwen3-4b-sft-v3` (Qwen3-4B full fine-tune, not 1.7B
       as originally planned — handoff pre-dated the decision to upgrade).
-- [x] Re-run `evaluate.py`. `bad_release=0.99` (target was >0.60), average=0.956
-      (target was >0.80). See `results/FINAL_RESULTS.md`.
-- [x] Regenerate `results/eval_curve_v3.png` with the V3 bar chart.
+- [x] Re-run `evaluate.py` with **5 held-out seeds** against the published HF
+      checkpoint. `bad_release=0.99` (target was >0.60), average=0.956
+      (target was >0.80). Numbers in `results/eval_summary.json` (canonical).
+      See `results/FINAL_RESULTS.md` for full table.
+- [x] Regenerate `results/eval_curve.png` with the V3 bar chart (canonical name).
+      V1 baseline preserved at `results/eval_curve_v1.png` for traceability.
 - [x] Training-loss curve at `results/training_loss_curve.png`, covering all
       3 stages with transition markers.
 
