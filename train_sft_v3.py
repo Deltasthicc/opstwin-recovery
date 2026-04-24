@@ -373,7 +373,7 @@ def main():
 
     model = AutoModelForCausalLM.from_pretrained(
         args.model,
-        dtype=torch.bfloat16,
+        torch_dtype=torch.bfloat16,
         device_map="auto",
         trust_remote_code=True,
     )
@@ -423,7 +423,7 @@ def main():
         bf16=True,
         gradient_checkpointing=(args.lora_rank == 0),
         optim="adamw_8bit",
-        max_length=1024,
+        max_seq_length=1024,
         packing=False,
         use_liger_kernel=True,
         report_to="none",

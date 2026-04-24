@@ -89,7 +89,7 @@ class ModelPolicy:
     single command per step. Pass --model <dir-or-hf-id> to enable.
     """
 
-    def __init__(self, model_path: str, max_new_tokens: int = 64):
+    def __init__(self, model_path: str, max_new_tokens: int = 128):
         from transformers import AutoModelForCausalLM, AutoTokenizer
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.model = AutoModelForCausalLM.from_pretrained(
@@ -114,6 +114,11 @@ class ModelPolicy:
 
     def act(self, obs) -> str:
         import torch
+        # Retroactively add the reward suffix to the previous step's history entry
+        # so the rendered prompt matches the training format: "S{step}: {cmd} -> {reward:+.2f}".
+        # (We can only know the reward for step N-1 when act(N) is called.)
+        if self._history and " -> " not in self._history[-1]:
+            self._history[-1] = f"{self._history[-1]} -> {self._last_reward:+.2f}"
         self._step += 1
         messages = [
             {"role": "system", "content": self._system_prompt},
