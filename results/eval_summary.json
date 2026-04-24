@@ -2,44 +2,66 @@
   "random": {
     "bad_release": {
       "policy": "random",
-      "n_seeds": 3,
-      "mean_score": 0.2383,
-      "std_score": 0.0126,
+      "n_seeds": 5,
+      "mean_score": 0.239,
+      "std_score": 0.0096,
       "min_score": 0.225,
       "max_score": 0.25,
-      "mean_reward": 0.0,
+      "mean_reward": -0.006,
       "raw_scores": [
         0.225,
         0.24,
-        0.25
+        0.25,
+        0.245,
+        0.235
       ]
     },
     "security_cve": {
       "policy": "random",
-      "n_seeds": 3,
-      "mean_score": 0.2217,
-      "std_score": 0.0153,
+      "n_seeds": 5,
+      "mean_score": 0.221,
+      "std_score": 0.0129,
       "min_score": 0.205,
       "max_score": 0.235,
-      "mean_reward": -0.0067,
+      "mean_reward": -0.018,
       "raw_scores": [
         0.205,
         0.225,
-        0.235
+        0.235,
+        0.23,
+        0.21
       ]
     },
     "data_pipeline_regression": {
       "policy": "random",
-      "n_seeds": 3,
-      "mean_score": 0.2383,
-      "std_score": 0.0126,
+      "n_seeds": 5,
+      "mean_score": 0.239,
+      "std_score": 0.0096,
       "min_score": 0.225,
       "max_score": 0.25,
-      "mean_reward": 0.0,
+      "mean_reward": -0.006,
       "raw_scores": [
         0.225,
         0.24,
-        0.25
+        0.25,
+        0.245,
+        0.235
+      ]
+    },
+    "false_positive": {
+      "policy": "random",
+      "n_seeds": 5,
+      "mean_score": 0.3,
+      "std_score": 0.0,
+      "min_score": 0.3,
+      "max_score": 0.3,
+      "mean_reward": 0.008,
+      "raw_scores": [
+        0.3,
+        0.3,
+        0.3,
+        0.3,
+        0.3
       ]
     }
   },
@@ -79,49 +101,83 @@
       "raw_scores": [
         0.99
       ]
+    },
+    "false_positive": {
+      "policy": "heuristic",
+      "n_seeds": 1,
+      "mean_score": 0.99,
+      "std_score": 0.0,
+      "min_score": 0.99,
+      "max_score": 0.99,
+      "mean_reward": 1.07,
+      "raw_scores": [
+        0.99
+      ]
     }
   },
   "trained": {
     "bad_release": {
       "policy": "trained",
-      "n_seeds": 3,
-      "mean_score": 0.4104,
+      "n_seeds": 5,
+      "mean_score": 0.99,
       "std_score": 0.0,
-      "min_score": 0.4104,
-      "max_score": 0.4104,
-      "mean_reward": 0.31,
+      "min_score": 0.99,
+      "max_score": 0.99,
+      "mean_reward": 1.12,
       "raw_scores": [
-        0.4104,
-        0.4104,
-        0.4104
+        0.99,
+        0.99,
+        0.99,
+        0.99,
+        0.99
       ]
     },
     "security_cve": {
       "policy": "trained",
-      "n_seeds": 3,
-      "mean_score": 0.8825,
+      "n_seeds": 5,
+      "mean_score": 0.99,
       "std_score": 0.0,
-      "min_score": 0.8825,
-      "max_score": 0.8825,
-      "mean_reward": 0.91,
+      "min_score": 0.99,
+      "max_score": 0.99,
+      "mean_reward": 1.07,
       "raw_scores": [
-        0.8825,
-        0.8825,
-        0.8825
+        0.99,
+        0.99,
+        0.99,
+        0.99,
+        0.99
       ]
     },
     "data_pipeline_regression": {
       "policy": "trained",
-      "n_seeds": 3,
-      "mean_score": 0.8283,
+      "n_seeds": 5,
+      "mean_score": 0.99,
       "std_score": 0.0,
-      "min_score": 0.8283,
-      "max_score": 0.8283,
-      "mean_reward": 0.73,
+      "min_score": 0.99,
+      "max_score": 0.99,
+      "mean_reward": 1.1,
       "raw_scores": [
-        0.8283,
-        0.8283,
-        0.8283
+        0.99,
+        0.99,
+        0.99,
+        0.99,
+        0.99
+      ]
+    },
+    "false_positive": {
+      "policy": "trained",
+      "n_seeds": 5,
+      "mean_score": 0.8557,
+      "std_score": 0.0,
+      "min_score": 0.8557,
+      "max_score": 0.8557,
+      "mean_reward": 0.81,
+      "raw_scores": [
+        0.8557,
+        0.8557,
+        0.8557,
+        0.8557,
+        0.8557
       ]
     }
   }
