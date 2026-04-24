@@ -102,6 +102,26 @@ venv.bak/
 checkpoints/
 checkpoints-*/
 runs/
+sft_checkpoints/
+sft_checkpoints-*/
+sft_checkpoints_v3/
+sft_checkpoints_v3_stage2/
+sft_checkpoints_v3_stage3/
+
+# Local HF model snapshots (downloaded on demand by scripts)
+v1_local/
+
+# Regeneratable training datasets — the training scripts produce these.
+# sft_dataset.jsonl (V1) is tracked; V3 datasets are regeneratable.
+sft_dataset_v3*.jsonl
+
+# Exploratory/intermediate eval dumps from the V3 investigation. The
+# canonical V3 numbers live in results/ and results_v3_stage3_step45/.
+results_v3_step75*/
+results_v1_fixed/
+
+# Local Claude Code settings
+.claude/
 
 # Postmortem store grows unbounded during runs; not source
 baselines/trajectories/postmortems.jsonl

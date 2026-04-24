@@ -49,12 +49,26 @@ Open `notebooks/opstwin_training_colab.ipynb` in Colab (Free tier T4), run all c
 - `bad_release` scenario trained score still at 0.42 (V1). `train_sft_v3.py` on main attempts to fix this through wrong-name augmentation and VERIFY_FLAG coverage; evaluation of v3 checkpoint not yet run.
 - Postmortem memory loop (Phase 4) not confirmed in main. Ablation table for judges would be nice to have.
 
-## Checkpoint 2 Targets (post-minimums)
+## Checkpoint 2 Targets (post-minimums) — DONE 2026-04-24
 
-- [ ] Run v3 training on the 5090, push new checkpoint to `Deltasthic/opstwin-qwen3-1.7b-sft` (or a v3 variant).
-- [ ] Re-run `evaluate.py`, expect `bad_release` above 0.60 and average above 0.80.
-- [ ] Regenerate `results/eval_curve.png` with the new bar chart.
-- [ ] Add a proper training-loss curve PNG (separate from the eval bar chart) so the rubric's "reward improvement evidence" line has an unambiguous single image.
+- [x] Run v3 training on the 5090, push new checkpoint. Published as
+      `Deltasthic/opstwin-qwen3-4b-sft-v3` (Qwen3-4B full fine-tune, not 1.7B
+      as originally planned — handoff pre-dated the decision to upgrade).
+- [x] Re-run `evaluate.py`. `bad_release=0.99` (target was >0.60), average=0.956
+      (target was >0.80). See `results/FINAL_RESULTS.md`.
+- [x] Regenerate `results/eval_curve_v3.png` with the V3 bar chart.
+- [x] Training-loss curve at `results/training_loss_curve.png`, covering all
+      3 stages with transition markers.
+
+Deviations from the handoff's plan:
+- Used a 3-stage curriculum (stage 1 broad, stage 2 balanced-rebalance, stage 3
+  DP focus + BR floor guard) instead of a single training run, to fix scenario
+  oscillation observed during stage 1.
+- Two `evaluate.py` bugs were fixed during the V3 investigation
+  (history-format mismatch, `max_new_tokens` too small). See methodology note
+  in `results/FINAL_RESULTS.md`.
+- Published checkpoint went to a new `...-v3` HF repo rather than overwriting
+  V1's `...-1.7b-sft`, keeping V1 available for historical comparison.
 
 ## Checkpoint 3 Targets (stretch)
 
